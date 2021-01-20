@@ -1,0 +1,27 @@
+{
+  "name": "pg-node-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node node_modules/nodemon/bin/nodemon bin/server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepush": "npm run lint",
+    "start": "node index.js"
+  },
+  "author": "Mauricio Jr",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "husky": "^4.3.6",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "pg": "^8.5.1"
+  }
+}
