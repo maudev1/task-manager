@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../config/postgres');
 
 exports.openTask = async (req, res) => {
     const { taskData, taskName, status  } = req.body;

@@ -1,15 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
+
+    <!--VUE-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+
+    <!-- FONTAWESOME -->
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+
+    <!-- BULMA -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <!-- AXIOS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
 </head>
+
 <body>
-    
+    <div id="app">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div v-for="item in this.task">
+                        {{ item.taskdata }}
+                        <h2 class="subtitle">{{ item.taskname }}</h2>
+                        <span class="tag is-danger">{{item.status}}</span>
+                    </div>
+                </div>
+            </div>
 
+        </div>
+        
+        <br>
+    </div>
 
-hello world
 
 </body>
+
+<script>
+    let app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                task: [],
+                data: '',
+                title: '',
+                status: ''
+
+            }
+
+        },
+        mounted() {
+            axios
+                .get('https://taskr-man.herokuapp.com/api/listTasks')
+                .then(response => (this.task = response.data));
+        },
+        methods: {
+
+
+        }
+    })
+
+
+</script>
+
 </html>
