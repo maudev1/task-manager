@@ -25,18 +25,59 @@
 
 <body>
     <div id="app">
-        <div class="container">
-            <div class="columns">
-                <div class="column">
-                    <div v-for="item in this.task">
-                        {{ item.taskdata }}
-                        <h2 class="subtitle">{{ item.taskname }}</h2>
-                        <span class="tag is-danger">{{item.status}}</span>
-                    </div>
+        <section class="hero is-warning">
+
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Taskr-man
+                    </h1>
+                    <h2 class="subtitle">task manager</h2>
                 </div>
             </div>
+        </section>
+        <div class="container is-fluid">
+            <div class="columns">
+                <div class="column is-two-fifths">
+                    <br>
+                    <h2 class="subtitle">Abrir uma nova tarefa:</h2>
+                    <div class="container">
+                        <div class="field">
+                            <div class="control ">
+                                <label class="label">Nome da tarefa:</label>
+                                <input class="input" type="text">
+                            </div>
+                            <div class="control">
+                                <label class="label">Data: </label>
+                                <input type="date" class="input date" name="" id="">
+                            </div>
+                            <div class="control">
+                                <br>
+                                <button class="button is-info">abrir</button>
+                            </div>
+                        </div>
+                    </div>
 
+
+                </div>
+                <div class="column">
+                    <br>
+                    <h2 class="subtitle">Minhas tarefas:</h2>
+                    <div class="container">
+                        <div v-for="item in task">
+                            <b> {{ item.taskdata }}
+                            <h2 class="subtitle"><b>Descrição:</b> {{ item.taskname }}</h2>
+                            <span class="tag is-danger">{{item.status}}</span>
+                        </div>
+
+                    </div>
+                    
+                    
+                </div>
+            </div>
         </div>
+
+        
         
         <br>
     </div>
@@ -49,10 +90,7 @@
         el: '#app',
         data() {
             return {
-                task: [],
-                data: '',
-                title: '',
-                status: ''
+                task:null
 
             }
 
