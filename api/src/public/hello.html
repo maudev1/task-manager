@@ -42,20 +42,22 @@
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
-                        <div class="field">
+                        <form v-on:submit.prevent="openTask">
                             <div class="control ">
                                 <label class="label">Nome da tarefa:</label>
-                                <input class="input" type="text">
+                                <input class="input" type="text" v-model="tasks.name" id="name">
                             </div>
                             <div class="control">
                                 <label class="label">Data: </label>
-                                <input type="date" class="input date" name="" id="">
+                                <input type="text" class="input date" v-model="tasks.date">
                             </div>
                             <div class="control">
                                 <br>
-                                <button class="button is-info">abrir</button>
+                                <button class="button is-info" v-on:click="openTask">abrir</button>
                             </div>
-                        </div>
+
+                        </form>
+
                     </div>
 
 
@@ -64,21 +66,23 @@
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
                     <div class="container">
-                        <div v-for="item in task">
-                            <b> {{ item.taskdata }}
+
+                        <div v-for="item in tasks">
+                            <p type="date"><b>{{ item.taskdata }}</b></p>
                             <h2 class="subtitle"><b>Descrição:</b> {{ item.taskname }}</h2>
                             <span class="tag is-danger">{{item.status}}</span>
+                            
                         </div>
 
                     </div>
-                    
-                    
+
+
                 </div>
             </div>
         </div>
 
-        
-        
+
+
         <br>
     </div>
 
@@ -90,17 +94,34 @@
         el: '#app',
         data() {
             return {
-                task:null
+               tasks:{
+                   name:'',
+                   date:0,
+                   status:'concluido'
 
+
+               }
+  
             }
 
         },
-        mounted() {
-            axios
+        async mounted() {
+            await axios
                 .get('https://taskr-man.herokuapp.com/api/listTasks')
-                .then(response => (this.task = response.data));
+                .then(response => (this.tasks = response.data));
         },
         methods: {
+            async openTask() {
+                
+                await axios.
+                    post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
+                    .then(response => {})
+                    .catch((error) => {
+
+                    }).finally(() => {
+
+                    });
+            }
 
 
         }
