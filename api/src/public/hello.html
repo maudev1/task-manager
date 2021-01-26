@@ -103,12 +103,12 @@
         },
         mounted() {
             axios
-                .get('https://taskr-man.herokuapp.com//api/listTasks')
+                .get('https://taskr-man.herokuapp.com/api/listTasks')
                 .then(response => (this.tasks = response.data));
         },
         methods: {
             newTask() {
-                axios.post('https://taskr-man.herokuapp.com//api/openTask', this.tasks)
+                axios.post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
                     .then(response => {
                         if (response.status == 201) {
                             console.info('Task aberta com sucesso!')
