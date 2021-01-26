@@ -53,25 +53,23 @@
                             </div>
                             <div class="control">
                                 <br>
-                                <button class="button is-info" v-on:click="openTask">abrir</button>
+                                <button class="button is-info" v-on:click="newTask">abrir</button>
                             </div>
 
                         </form>
 
                     </div>
 
-
                 </div>
                 <div class="column">
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
                     <div class="container">
-
                         <div v-for="item in tasks">
-                            <p type="date"><b>{{ item.taskdata }}</b></p>
-                            <h2 class="subtitle"><b>Descrição:</b> {{ item.taskname }}</h2>
+                            <p type="date"><b>{{ item.date }}</b></p>
+                            <h2 class="subtitle"><b>Descrição:</b> {{ item.name }}</h2>
                             <span class="tag is-danger">{{item.status}}</span>
-                            
+                            <p><b>Operador: </b>{{item.operator}}</p>
                         </div>
 
                     </div>
@@ -80,8 +78,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <br>
     </div>
@@ -94,40 +90,41 @@
         el: '#app',
         data() {
             return {
-               tasks:{
-                   name:'',
-                   date:0,
-                   status:'concluido'
+                tasks: {
+                    name: '',
+                    date: 0,
+                    status: 'concluido',
+                    operator: ''
 
+                }
 
-               }
-  
             }
 
         },
-        async mounted() {
-            await axios
-                .get('https://taskr-man.herokuapp.com/api/listTasks')
+        mounted() {
+            axios
+                .get('https://taskr-man.herokuapp.com//api/listTasks')
                 .then(response => (this.tasks = response.data));
         },
         methods: {
-            async openTask() {
-                
-                await axios.
-                    post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
-                    .then(response => {})
-                    .catch((error) => {
+            newTask() {
+                axios.post('https://taskr-man.herokuapp.com//api/openTask', this.tasks)
+                    .then(response => {
+                        if (response.status == 201) {
+                            console.info('Task aberta com sucesso!')
+                        }
 
-                    }).finally(() => {
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                    .finally(() => {
 
                     });
             }
 
-
         }
     })
-
-
 </script>
 
 </html>

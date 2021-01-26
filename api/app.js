@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 
 const index = require('./src/routes/index');
+
 const taskRoute = require('./src/routes/task');
 
 app.use(express.static('public'));
@@ -17,7 +18,5 @@ app.use(cors());
 
 app.use(index);
 app.use('/api/', taskRoute);
-
-
 
 module.exports = app;
