@@ -42,7 +42,7 @@
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
-                        <form v-on:submit.prevent="openTask">
+                        <form >
                             <div class="control ">
                                 <label class="label">Nome da tarefa:</label>
                                 <input class="input" type="text" v-model="tasks.name" id="name">
@@ -53,7 +53,7 @@
                             </div>
                             <div class="control">
                                 <br>
-                                <button class="button is-info" v-on:click="newTask">abrir</button>
+                                <button class="button is-info" stype='submit'>abrir</button>
                             </div>
 
                         </form>
