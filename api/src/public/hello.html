@@ -9,7 +9,6 @@
     <!--VUE-->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-
     <!-- FONTAWESOME -->
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
 
@@ -19,14 +18,11 @@
     <!-- AXIOS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-
-
 </head>
 
 <body>
     <div id="app">
         <section class="hero is-warning">
-
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -42,38 +38,44 @@
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
-                        <form >
+
+                        <div>
                             <div class="control ">
                                 <label class="label">Nome da tarefa:</label>
-                                <input class="input" type="text" v-model="tasks.name" id="name">
+                                <input class="input" type="text" v-model="this.tasks.name" id="name">
                             </div>
                             <div class="control">
                                 <label class="label">Data: </label>
-                                <input type="text" class="input date" v-model="tasks.date">
+                                {{tasks.name}}
+                                <input type="text" class="input date" v-model="this.tasks.date">
                             </div>
                             <div class="control">
                                 <br>
-                                <button class="button is-info" stype='submit'>abrir</button>
+                                <button class="button is-info" type='' v-on:click="newTask()">abrir</button>
                             </div>
 
-                        </form>
-
-                    </div>
-
-                </div>
-                <div class="column">
-                    <br>
-                    <h2 class="subtitle">Minhas tarefas:</h2>
-                    <div class="container">
-                        <div v-for="item in tasks">
-                            <p type="date"><b>{{ item.date }}</b></p>
-                            <h2 class="subtitle"><b>Descrição:</b> {{ item.name }}</h2>
-                            <span class="tag is-danger">{{item.status}}</span>
-                            <p><b>Operador: </b>{{item.operator}}</p>
                         </div>
 
                     </div>
 
+                </div>
+                <div class="column is-two-fifths">
+                    <br>
+                    <h2 class="subtitle">Minhas tarefas:</h2>
+                    <section class="section">
+                        <div class="level" v-for="item in tasks">
+                            <div class="level-left">
+                                <h3><b>{{ item.name }}</b></h3>
+                            </div>
+                            <div class="level-right">
+                                <p><b>Operador: </b>{{item.operator}}</p>
+                                <span class="tag is-danger level-item">{{item.status}}</span>
+                            </div>
+
+                            <br>
+                        </div>
+
+                    </section>
 
                 </div>
             </div>
@@ -82,10 +84,21 @@
         <br>
     </div>
 
-
 </body>
 
 <script>
+    //   const options = {
+    //       method: 'POST',
+    //       url: 'http://localhost:3030/api/openTask',
+    //       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    //       data: {
+    //           date: 29031990,
+    //           name: 'Tarefa de testes 1',
+    //           status: 'a fazer',
+    //           operator: 'mauricio'
+    //       }
+    //   };
+
     let app = new Vue({
         el: '#app',
         data() {
@@ -93,7 +106,7 @@
                 tasks: {
                     name: '',
                     date: 0,
-                    status: 'concluido',
+                    status: '',
                     operator: ''
 
                 }
@@ -101,14 +114,14 @@
             }
 
         },
-        mounted() {
-            axios
-                .get('https://taskr-man.herokuapp.com/api/listTasks')
+        async mounted() {
+            await axios.get('https://taskr-man.herokuapp.com/api/listTasks')
                 .then(response => (this.tasks = response.data));
+
         },
         methods: {
-            newTask() {
-                axios.post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
+            async newTask() {
+                await axios.post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
                     .then(response => {
                         if (response.status == 201) {
                             console.info('Task aberta com sucesso!')
@@ -116,7 +129,7 @@
 
                     })
                     .catch((error) => {
-                        console.log(error)
+                        console.log(error, this.tasks)
                     })
                     .finally(() => {
 
