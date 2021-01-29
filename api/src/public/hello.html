@@ -12,8 +12,13 @@
     <!-- FONTAWESOME -->
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
 
+    <!-- MATERIAL DESIGN ICONS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css">
+
     <!-- BULMA -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
 
     <!-- AXIOS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -29,54 +34,56 @@
                         Taskr-man
                     </h1>
                     <h2 class="subtitle">task manager</h2>
+
+
                 </div>
             </div>
         </section>
         <div class="container is-fluid">
             <div class="columns">
-                <div class="column is-two-fifths">
+                <div class="column is-two-fifths" :class="hidden">
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input type="text" class="input is-loading" v-model="tasks.name">
 
-                        <div>
-                            <div class="control ">
-                                <label class="label">Nome da tarefa:</label>
-                                <input class="input" type="text" v-model="this.tasks.name" id="name">
                             </div>
                             <div class="control">
-                                <label class="label">Data: </label>
-                                {{tasks.name}}
-                                <input type="text" class="input date" v-model="this.tasks.date">
-                            </div>
-                            <div class="control">
-                                <br>
-                                <button class="button is-info" type='' v-on:click="newTask()">abrir</button>
-                            </div>
+                                <a class="button is-success" v-on:click="newTask">enviar</a>
 
+                            </div>
                         </div>
 
                     </div>
 
                 </div>
-                <div class="column is-two-fifths">
+                <div class="is-divider-vertical"></div>
+                <div class="column">
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
-                    <section class="section">
-                        <div class="level" v-for="item in tasks">
-                            <div class="level-left">
-                                <h3><b>{{ item.name }}</b></h3>
-                            </div>
-                            <div class="level-right">
-                                <p><b>Operador: </b>{{item.operator}}</p>
-                                <span class="tag is-danger level-item">{{item.status}}</span>
-                            </div>
+                    <form class="form">
+                        <ul v-for="item in arr">
+                            <li>
+                                <div class="box">
+                                    <h2 class="subtitle">{{ item.name }}</h2>
+                                    <span class="tag">{{ item.status }}</span>
 
-                            <br>
-                        </div>
+                                    <button class="button is-success is-pulled-right">
+                                        <span class="icon is-small">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+            
+                                      </button>
+                                </div>
+                                <br>
+                            </li>
 
-                    </section>
 
+                        </ul>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -87,27 +94,20 @@
 </body>
 
 <script>
-    //   const options = {
-    //       method: 'POST',
-    //       url: 'http://localhost:3030/api/openTask',
-    //       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    //       data: {
-    //           date: 29031990,
-    //           name: 'Tarefa de testes 1',
-    //           status: 'a fazer',
-    //           operator: 'mauricio'
-    //       }
-    //   };
+    const host = 'https://taskr-man.herokuapp.com/api';
 
-    let app = new Vue({
+    const app = new Vue({
         el: '#app',
         data() {
             return {
+                arr: [],
+                hidden: '',
+
                 tasks: {
                     name: '',
-                    date: 0,
-                    status: '',
-                    operator: ''
+                    date: 29031990,
+                    status: 'pendente',
+                    operator: 'Mauricio'
 
                 }
 
@@ -115,13 +115,20 @@
 
         },
         async mounted() {
-            await axios.get('https://taskr-man.herokuapp.com/api/listTasks')
-                .then(response => (this.tasks = response.data));
+            await axios.get(host + '/listTasks')
+                .then(response => (tasks = response.data));
+            tasks.forEach(item => {
+                this.arr.push(item)
+                console.log(this.arr)
+            });
+
+
 
         },
         methods: {
+
             async newTask() {
-                await axios.post('https://taskr-man.herokuapp.com/api/openTask', this.tasks)
+                await axios.post(host + '/openTask', this.tasks)
                     .then(response => {
                         if (response.status == 201) {
                             console.info('Task aberta com sucesso!')
@@ -129,9 +136,12 @@
 
                     })
                     .catch((error) => {
-                        console.log(error, this.tasks)
+                        console.log(error)
                     })
                     .finally(() => {
+
+                        location.reload();
+
 
                     });
             }
