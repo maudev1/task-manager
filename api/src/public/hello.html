@@ -48,7 +48,6 @@
                         <div class="field has-addons">
                             <div class="control">
                                 <input type="text" class="input is-loading" v-model="tasks.name">
-
                             </div>
                             <div class="control">
                                 <a class="button is-success" v-on:click="newTask">enviar</a>
@@ -139,6 +138,9 @@
                         console.log(error)
                     })
                     .finally(() => {
+                        
+                        location.reload(); 
+
 
                         location.reload();
 
