@@ -18,8 +18,6 @@
     <!-- BULMA -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-
     <!-- AXIOS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -27,18 +25,13 @@
 
 <body>
     <div id="app">
-        <section class="hero is-warning">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">
-                        Taskr-man
-                    </h1>
-                    <h2 class="subtitle">task manager</h2>
-
-
-                </div>
+        <nav class="navbar  is-warning is-fixed-top is-transparent">
+            <div class="nav-brand has-text-centered">
+                <p class="title"><b>TASKR</b></p>
             </div>
-        </section>
+        </nav>
+        <br>
+        <br>
         <div class="container is-fluid">
             <div class="columns">
                 <div class="column is-two-fifths" :class="hidden">
@@ -66,20 +59,42 @@
                         <ul v-for="item in arr">
                             <li>
                                 <div class="box">
-                                    <h2 class="subtitle">{{ item.name }}</h2>
-                                    <span class="tag">{{ item.status }}</span>
+                                    <div class="field">
+                                        <div class="control">
+                                            <h2 class="subtitle is-pulled-left">{{ item.name }}</h2>
+                                            <p class="is-pulled-right is-size-7">{{ item.date }}</p>
 
-                                    <button class="button is-success is-pulled-right">
-                                        <span class="icon is-small">
-                                          <i class="fas fa-check"></i>
-                                        </span>
-            
-                                      </button>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <p>
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, sunt
+                                                impedit? Suscipit repellat ducimus at aliquam ipsa aperiam amet, ea
+                                                unde, molestias quae consectetur ratione. Fuga nobis quaerat voluptatum
+                                                dignissimos.
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+
+                                            <button class="button is-rounded is-success is-right"
+                                                v-on:click="closeTask">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <br>
                             </li>
-
-
                         </ul>
 
                     </form>
@@ -90,66 +105,97 @@
         <br>
     </div>
 
-</body>
+    <script>
+        const host = 'https://taskr-man.herokuapp.com/api';
+        //const host = "http://localhost:3030/api"
 
-<script>
-    const host = 'https://taskr-man.herokuapp.com/api';
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    arr: [],
+                    hidden: '',
+                    tasks: {
+                        id: null,
+                        name: '',
+                        date: Date(),
+                        status: 'pendente',
+                        operator: 'Mauricio'
 
-    const app = new Vue({
-        el: '#app',
-        data() {
-            return {
-                arr: [],
-                hidden: '',
-
-                tasks: {
-                    name: '',
-                    date: 29031990,
-                    status: 'pendente',
-                    operator: 'Mauricio'
+                    }
 
                 }
 
+            },
+            async mounted() {
+                await axios.get(host + '/listTasks')
+                    .then(response => (tasks = response.data));
+                tasks.forEach(item => {
+
+                    if (item.status == 'pendente') {
+                        this.arr.push(item)
+                        //console.log(this.arr)
+                    }
+
+                });
+
+            },
+            methods: {
+                async newTask() {
+                    //var Mydate = new Date();
+                    await axios.post(host + '/openTask', this.tasks)
+                        .then(response => {
+                            if (response.status == 201) {
+                                console.info('Task aberta com sucesso!')
+                            }
+
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                        .finally(() => {
+                            location.reload();
+
+                        });
+
+                },
+
+                async closeTask() {
+                    await axios.post(host + '/closeTask', this.tasks)
+                        .then(response => {
+                            if (response.status == 201) {
+                                console.info('Task finalizada com sucesso!')
+                            }
+
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                        .finally(() => {
+                            location.reload();
+
+                        });
+                }
+
+
             }
+        })
 
-        },
-        async mounted() {
-            await axios.get(host + '/listTasks')
-                .then(response => (tasks = response.data));
-            tasks.forEach(item => {
-                this.arr.push(item)
-                console.log(this.arr)
-            });
+    </script>
 
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p class="has-text-centered">
+                <b>TASKR</b> - task manager is a software developed by Mauricio Jr - 2021
+            </p>
+        </div>
+    </footer>
 
-
-        },
-        methods: {
-
-            async newTask() {
-                await axios.post(host + '/openTask', this.tasks)
-                    .then(response => {
-                        if (response.status == 201) {
-                            console.info('Task aberta com sucesso!')
-                        }
-
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-                    .finally(() => {
-                        
-                        location.reload(); 
+</body>
 
 
-                        location.reload();
 
 
-                    });
-            }
-
-        }
-    })
 </script>
 
 </html>

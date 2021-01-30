@@ -17,7 +17,15 @@ exports.openTask = async (req, res) => {
 };
 
 exports.listAllTasks = async(req, res) => {
-    const response = await db.query('SELECT * FROM tasks ORDER BY name ASC');
+    const response = await db.query('SELECT * FROM tasks ORDER BY id ASC');
     res.status(200).send(response.rows);
 
+}
+
+exports.closeTask = async(req, res) => {
+    const {id, status} = req.body;
+    const { rows } = await db.query(
+        "UPDATE tasks SET ($1)' WHERE ($2)",
+        [status,id]
+    )
 }
