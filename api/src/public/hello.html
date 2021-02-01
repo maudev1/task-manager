@@ -106,8 +106,8 @@
     </div>
 
     <script>
-        const host = 'https://taskr-man.herokuapp.com/api';
-        //const host = "http://localhost:3030/api"
+        //const host = 'https://taskr-man.herokuapp.com/api';
+        const host = "http://localhost:3030/api"
 
         const app = new Vue({
             el: '#app',
@@ -142,7 +142,6 @@
             },
             methods: {
                 async newTask() {
-                    //var Mydate = new Date();
                     await axios.post(host + '/openTask', this.tasks)
                         .then(response => {
                             if (response.status == 201) {
