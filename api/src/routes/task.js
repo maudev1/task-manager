@@ -6,6 +6,6 @@ router.use(cors());
 
 router.post('/openTask', taskController.openTask)
 router.get('/listTasks', taskController.listAllTasks)
-router.get('/closeTask', taskController.closeTask)
+router.put('/closeTask', taskController.closeTask)
 
 module.exports = router;

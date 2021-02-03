@@ -61,11 +61,14 @@
                                 <div class="box">
                                     <div class="field">
                                         <div class="control">
+                                            <div class="tag is-pulled-left">{{ item.id }}</div>
+
                                             <h2 class="subtitle is-pulled-left">{{ item.name }}</h2>
                                             <p class="is-pulled-right is-size-7">{{ item.date }}</p>
 
                                         </div>
                                     </div>
+
                                     <div class="field">
                                         <div class="control">
                                             <p>
@@ -80,7 +83,7 @@
                                     <div class="field">
                                         <div class="control">
 
-                                            <button class="button is-rounded is-success is-right"
+                                            <button v-bind:key="item.id" class="button is-rounded is-success is-right"
                                                 v-on:click="closeTask">
                                                 <span class="icon is-small">
                                                     <i class="fas fa-check"></i>
@@ -106,8 +109,8 @@
     </div>
 
     <script>
-        const host = 'https://taskr-man.herokuapp.com/api';
-        //const host = "http://localhost:3030/api"
+        //const host = 'https://taskr-man.herokuapp.com/api';
+        const host = "http://localhost:3030/api"
 
         const app = new Vue({
             el: '#app',
@@ -160,10 +163,11 @@
                 },
 
                 async closeTask() {
-                    await axios.post(host + '/closeTask', this.tasks)
+                    await axios.put(host + '/closeTask', this.tasks)
                         .then(response => {
                             if (response.status == 201) {
-                                console.info('Task finalizada com sucesso!')
+
+                                console.log('tarefa concluida')
                             }
 
                         })
@@ -191,9 +195,6 @@
     </footer>
 
 </body>
-
-
-
 
 </script>
 

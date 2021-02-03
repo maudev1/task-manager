@@ -23,9 +23,9 @@ exports.listAllTasks = async(req, res) => {
 }
 
 exports.closeTask = async(req, res) => {
-    const {id, status} = req.body;
+    const {id} = req.body;
     const { rows } = await db.query(
-        "UPDATE tasks SET ($1)' WHERE ($2)",
-        [status,id]
+    `UPDATE tasks SET status = 'concluido' WHERE id=${id}`,
     )
+    
 }
