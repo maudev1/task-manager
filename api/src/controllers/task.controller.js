@@ -1,16 +1,16 @@
 const db = require('../config/postgres');
 
 exports.openTask = async (req, res) => {
-    const { date, name, status, operator } = req.body;
+    const { date, name, status, operator, description } = req.body;
     const { rows } = await db.query(
-        "INSERT INTO tasks(date, name, status, operator) VALUES ($1, $2, $3, $4)",
-        [date, name, status, operator]
+        "INSERT INTO tasks(date, name, status, operator) VALUES ($1, $2, $3, $4, $5)",
+        [date, name, status, operator, description]
     );
 
     res.status(201).send({
         message: 'task aberta com sucesso!',
         body: {
-            task: {date, name, status, operator }
+            task: {date, name, status, operator, description }
         },
     });
 

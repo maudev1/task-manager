@@ -38,11 +38,17 @@
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
-                        <div class="field has-addons">
+                        <div class="field">
                             <div class="control">
+                                <label class="label">Titulo</label>
                                 <input type="text" class="input is-loading" v-model="tasks.name">
                             </div>
                             <div class="control">
+                                <label class="label">Descrição</label>
+                                <textarea name="" class="textarea" id="" cols="30" rows="5" v-model="tasks.drescription"></textarea>
+                            </div>
+                            <div class="control">
+                                <br>
                                 <a class="button is-success" v-on:click="newTask">enviar</a>
 
                             </div>
@@ -55,7 +61,7 @@
                 <div class="column">
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
-                    <form cass="form" >
+                    <form cass="form">
                         <ul v-for="item in arr">
                             <li>
                                 <div class="box">
@@ -72,10 +78,7 @@
                                     <div class="field">
                                         <div class="control">
                                             <p>
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, sunt
-                                                impedit? Suscipit repellat ducimus at aliquam ipsa aperiam amet, ea
-                                                unde, molestias quae consectetur ratione. Fuga nobis quaerat voluptatum
-                                                dignissimos.
+                                                {{ item.drescription }}
                                             </p>
 
                                         </div>
@@ -123,7 +126,8 @@
                         name: '',
                         date: Date(),
                         status: 'pendente',
-                        operator: 'Mauricio'
+                        operator: 'Mauricio',
+                        drescription:'teste'
                     }
                 }
             },
@@ -137,7 +141,7 @@
                 });
             },
             methods: {
-                
+
                 async newTask() {
                     await axios.post(host + '/openTask', this.tasks)
                         .then(response => {
@@ -156,19 +160,19 @@
 
                 closeTask(taskId) {
                     alert("Encerrando tarefa: " + taskId)
-                    axios.put(host + '/closeTask', {id: taskId}).then(response => {
+                    axios.put(host + '/closeTask', { id: taskId }).then(response => {
                         alert("response...")
                         console.log(response);
                         if (response.status == 201) {
                             alert('tarefa concluida');
                         }
                     })
-                    .catch( error => {
-                        alert(error);
-                    })
-                    .finally( () => {
-                       
-                    });
+                        .catch(error => {
+                            alert(error);
+                        })
+                        .finally(() => {
+
+                        });
                 }
 
             }
