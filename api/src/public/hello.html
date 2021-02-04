@@ -45,7 +45,7 @@
                             </div>
                             <div class="control">
                                 <label class="label">Descrição</label>
-                                <textarea name="" class="textarea" id="" cols="30" rows="5" v-model="tasks.drescription"></textarea>
+                                <textarea name="" class="textarea" id="" cols="30" rows="5" v-model="tasks.description"></textarea>
                             </div>
                             <div class="control">
                                 <br>
@@ -78,7 +78,7 @@
                                     <div class="field">
                                         <div class="control">
                                             <p>
-                                                {{ item.drescription }}
+                                                {{ item.description }}
                                             </p>
 
                                         </div>
@@ -127,7 +127,7 @@
                         date: Date(),
                         status: 'pendente',
                         operator: 'Mauricio',
-                        drescription:'teste'
+                        description:''
                     }
                 }
             },
@@ -141,7 +141,6 @@
                 });
             },
             methods: {
-
                 async newTask() {
                     await axios.post(host + '/openTask', this.tasks)
                         .then(response => {
@@ -160,13 +159,12 @@
 
                 closeTask(taskId) {
                     alert("Encerrando tarefa: " + taskId)
-                    axios.put(host + '/closeTask', { id: taskId }).then(response => {
+                    axios.put(host + '/closeTask', { id:taskId }).then(response => {
                         alert("response...")
                         console.log(response);
                         if (response.status == 201) {
                             alert('tarefa concluida');
-                        }
-                    })
+                        }})
                         .catch(error => {
                             alert(error);
                         })
