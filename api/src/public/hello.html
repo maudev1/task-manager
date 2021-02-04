@@ -55,13 +55,13 @@
                 <div class="column">
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
-                    <form class="form">
+                    <form cass="form" >
                         <ul v-for="item in arr">
                             <li>
                                 <div class="box">
                                     <div class="field">
                                         <div class="control">
-                                            <div class="tag is-pulled-left">{{ item.id }}</div>
+                                            <div class="tag is-pulled-left" v-bind:key="item.id">{{ item.id }}</div>
 
                                             <h2 class="subtitle is-pulled-left">{{ item.name }}</h2>
                                             <p class="is-pulled-right is-size-7">{{ item.date }}</p>
@@ -83,8 +83,8 @@
                                     <div class="field">
                                         <div class="control">
 
-                                            <button v-bind:key="item.id" class="button is-rounded is-success is-right"
-                                                v-on:click="closeTask">
+                                            <button class="button is-rounded is-success is-right"
+                                                @click="closeTask(item.id)">
                                                 <span class="icon is-small">
                                                     <i class="fas fa-check"></i>
                                                 </span>
@@ -124,26 +124,20 @@
                         date: Date(),
                         status: 'pendente',
                         operator: 'Mauricio'
-
                     }
-
                 }
-
             },
             async mounted() {
-                await axios.get(host + '/listTasks')
-                    .then(response => (tasks = response.data));
+                await axios.get(host + '/listTasks').then(response => (tasks = response.data));
                 tasks.forEach(item => {
-
                     if (item.status == 'pendente') {
                         this.arr.push(item)
                         //console.log(this.arr)
                     }
-
                 });
-
             },
             methods: {
+                
                 async newTask() {
                     await axios.post(host + '/openTask', this.tasks)
                         .then(response => {
@@ -156,30 +150,26 @@
                             console.log(error)
                         })
                         .finally(() => {
-                            location.reload();
-
                         });
 
                 },
 
-                async closeTask() {
-                    await axios.put(host + '/closeTask', this.tasks)
-                        .then(response => {
-                            if (response.status == 201) {
-
-                                console.log('tarefa concluida')
-                            }
-
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                        .finally(() => {
-                            location.reload();
-
-                        });
+                closeTask(taskId) {
+                    alert("Encerrando tarefa: " + taskId)
+                    axios.put(host + '/closeTask', {id: taskId}).then(response => {
+                        alert("response...")
+                        console.log(response);
+                        if (response.status == 201) {
+                            alert('tarefa concluida');
+                        }
+                    })
+                    .catch( error => {
+                        alert(error);
+                    })
+                    .finally( () => {
+                       
+                    });
                 }
-
 
             }
         })
