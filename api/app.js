@@ -13,7 +13,7 @@ const index = require('./src/routes/index');
 
 const taskRoute = require('./src/routes/task');
 
-app.use(express.static('public'));
+app.use('/',express.static('api/src/public'));
 
 app.use(express.urlencoded({ extended: true }));
 

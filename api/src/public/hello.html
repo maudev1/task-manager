@@ -21,31 +21,39 @@
     <!-- AXIOS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+
+
 </head>
 
 <body>
     <div id="app">
-        <nav class="navbar  is-warning is-fixed-top is-transparent">
-            <div class="nav-brand has-text-centered">
-                <p class="title"><b>TASKR</b></p>
+        <nav class="bd-navbar navbar  is-warning is-fixed-top">
+            <div class="navbar-brand has-text-centered">
+                <div class="navbar-item">
+                    <p class="title"><b>TASKR</b></p>
+
+                </div>
             </div>
         </nav>
         <br>
         <br>
         <div class="container is-fluid">
             <div class="columns">
-                <div class="column is-two-fifths" :class="hidden">
+                <div class="column is-two-fifths">
                     <br>
                     <h2 class="subtitle">Abrir uma nova tarefa:</h2>
                     <div class="container">
                         <div class="field">
                             <div class="control">
+
                                 <label class="label">Titulo</label>
-                                <input type="text" class="input is-loading" v-model="tasks.name">
+                                <input type="text" class="input" v-model="tasks.name" v-bind:class="erro" required />
+
                             </div>
                             <div class="control">
                                 <label class="label">Descrição</label>
-                                <textarea name="" class="textarea" id="" cols="30" rows="5" v-model="tasks.description"></textarea>
+                                <textarea name="" class="textarea" id="" cols="30" rows="5"
+                                    v-model="tasks.description"></textarea>
                             </div>
                             <div class="control">
                                 <br>
@@ -57,7 +65,7 @@
                     </div>
 
                 </div>
-                <div class="is-divider-vertical"></div>
+
                 <div class="column">
                     <br>
                     <h2 class="subtitle">Minhas tarefas:</h2>
@@ -68,7 +76,6 @@
                                     <div class="field">
                                         <div class="control">
                                             <div class="tag is-pulled-left" v-bind:key="item.id">{{ item.id }}</div>
-
                                             <h2 class="subtitle is-pulled-left">{{ item.name }}</h2>
                                             <p class="is-pulled-right is-size-7">{{ item.date }}</p>
 
@@ -83,6 +90,7 @@
 
                                         </div>
                                     </div>
+
                                     <div class="field">
                                         <div class="control">
 
@@ -93,7 +101,6 @@
                                                 </span>
 
                                             </button>
-
 
                                         </div>
                                     </div>
@@ -120,14 +127,13 @@
             data() {
                 return {
                     arr: [],
-                    hidden: '',
                     tasks: {
                         id: null,
                         name: '',
                         date: Date(),
                         status: 'pendente',
                         operator: 'Mauricio',
-                        description:''
+                        description: ''
                     }
                 }
             },
@@ -136,35 +142,45 @@
                 tasks.forEach(item => {
                     if (item.status == 'pendente') {
                         this.arr.push(item)
-                        //console.log(this.arr)
                     }
                 });
             },
             methods: {
                 async newTask() {
-                    await axios.post(host + '/openTask', this.tasks)
-                        .then(response => {
-                            if (response.status == 201) {
-                                console.info('Task aberta com sucesso!')
-                            }
+                    if (this.tasks.name != '') {
+                        await axios.post(host + '/openTask', this.tasks)
+                            .then(response => {
+                                if (response.status == 201) {
+                                    console.info('Task aberta com sucesso!')
 
-                        })
-                        .catch((error) => {
-                            console.log(error)
-                        })
-                        .finally(() => {
-                        });
+                                }
+
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                            })
+                            .finally(() => {
+                                location.reload();
+
+                            });
+
+
+                    }
+                    else {
+                        alert('O nome da Tarefa não pode ficar em branco!')
+                    }
 
                 },
 
                 closeTask(taskId) {
                     alert("Encerrando tarefa: " + taskId)
-                    axios.put(host + '/closeTask', { id:taskId }).then(response => {
+                    axios.put(host + '/closeTask', { id: taskId }).then(response => {
                         alert("response...")
                         console.log(response);
                         if (response.status == 201) {
                             alert('tarefa concluida');
-                        }})
+                        }
+                    })
                         .catch(error => {
                             alert(error);
                         })
@@ -177,17 +193,23 @@
         })
 
     </script>
+    <style>
+        .img {
+            text-align: center;
+
+        }
+    </style>
 
     <footer class="footer">
         <div class="content has-text-centered">
             <p class="has-text-centered">
                 <b>TASKR</b> - task manager is a software developed by Mauricio Jr - 2021
             </p>
+            <img class="img" src="made-with-bulma.png" width="200" height="38">
+
         </div>
     </footer>
 
 </body>
-
-</script>
 
 </html>
