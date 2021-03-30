@@ -47,8 +47,8 @@
                             <div class="control">
 
                                 <label class="label">Titulo</label>
-                                <input type="text" class="input" v-model="tasks.name" v-bind:class="erro" required />
-
+                                <input type="text" class="input" v-model="tasks.name"  />
+                                
                             </div>
                             <div class="control">
                                 <label class="label">Descrição</label>
@@ -147,7 +147,18 @@
             },
             methods: {
                 async newTask() {
-                    if (this.tasks.name != '') {
+                    if (this.tasks.name.trim() != '') {
+
+                        this.arr.push({
+                            id:this.tasks.id,
+                            name:this.tasks.name,
+                            date:this.tasks.date,
+                            status:this.tasks.status,
+                            operator:this.tasks.operator,
+                            description:this.tasks.description
+
+                        })
+                        
                         await axios.post(host + '/openTask', this.tasks)
                             .then(response => {
                                 if (response.status == 201) {
@@ -160,7 +171,7 @@
                                 console.log(error)
                             })
                             .finally(() => {
-                                location.reload();
+                                //location.reload();
 
                             });
 
