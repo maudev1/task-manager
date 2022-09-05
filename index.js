@@ -1,4 +1,4 @@
-const app = require('./api/app');
+const app = require('./src/app');
 const cors = require('cors');
 
 app.use((req, res, next) => {

@@ -1,5 +1,6 @@
 const db = require('../config/postgres');
 
+
 exports.openTask = async (req, res) => {
     const { date, name, status, operator, description } = req.body;
     const { rows } = await db.query(

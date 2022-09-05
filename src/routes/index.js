@@ -1,9 +1,9 @@
 const express = require('express');
-
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.sendfile('api/src/public/hello.html')
+  // res.sendfile('./views/index.html')
+  res.render('./public/')
 })
 
 module.exports = router;

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+
+    <!--VUE-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <!-- FONTAWESOME -->
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+
+    <!-- MATERIAL DESIGN ICONS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css">
+
+    <!-- BULMA -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <!-- AXIOS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id="app">
+        <nav class="bd-navbar navbar  is-warning is-fixed-top">
+            <div class="navbar-brand has-text-centered">
+                <div class="navbar-item">
+                    <p class="title"><b>TASKR</b></p>
+
+                </div>
+            </div>
+        </nav>
+        <br>
+        <br>
+        <div class="container is-fluid">
+            <div class="columns">
+                <div class="column is-two-fifths">
+                    <br>
+                    <h2 class="subtitle">Abrir uma nova tarefa:</h2>
+                    <div class="container">
+                        <div class="field">
+                            <div class="control">
+
+                                <label class="label">Titulo</label>
+                                <input type="text" class="input" v-model="tasks.name"  />
+                                
+                            </div>
+                            <div class="control">
+                                <label class="label">Descrição</label>
+                                <textarea name="" class="textarea" id="" cols="30" rows="5"
+                                    v-model="tasks.description"></textarea>
+                            </div>
+                            <div class="control">
+                                <br>
+                                <a class="button is-success" v-on:click="newTask">enviar</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="column">
+                    <br>
+                    <h2 class="subtitle">Minhas tarefas:</h2>
+                    <form cass="form">
+                        <ul v-for="item in arr">
+                            <li>
+                                <div class="box">
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="tag is-pulled-left" v-bind:key="item.id">{{ item.id }}</div>
+                                            <h2 class="subtitle is-pulled-left">{{ item.name }}</h2>
+                                            <p class="is-pulled-right is-size-7">{{ item.date }}</p>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <div class="control">
+                                            <p>
+                                                {{ item.description }}
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <div class="control">
+
+                                            <button class="button is-rounded is-success is-right"
+                                                @click="closeTask(item.id)">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br>
+                            </li>
+                        </ul>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <br>
+    </div>
+
+    <script>
+        const host = 'https://taskr-man.herokuapp.com/api';
+        //const host = "http://localhost:3030/api"
+
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    arr: [],
+                    tasks: {
+                        id: null,
+                        name: '',
+                        date: new Date().toLocaleString(),
+                        status: 'pendente',
+                        operator: 'Mauricio',
+                        description: ''
+                    }
+                }
+            },
+            async mounted() {
+                await axios.get(host + '/listTasks').then(response => (tasks = response.data));
+                tasks.forEach(item => {
+                    if (item.status == 'pendente') {
+                        this.arr.push(item)
+                    }
+                });
+            },
+            methods: {
+                async newTask() {
+                    if (this.tasks.name.trim() != '') {
+
+                        this.arr.push({
+                            id:this.tasks.id,
+                            name:this.tasks.name,
+                            date:this.tasks.date,
+                            status:this.tasks.status,
+                            operator:this.tasks.operator,
+                            description:this.tasks.description
+
+                        })
+                        
+                        await axios.post(host + '/openTask', this.tasks)
+                            .then(response => {
+                                if (response.status == 201) {
+                                    console.info('Task aberta com sucesso!')
+
+                                }
+
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                            })
+                            .finally(() => {
+                                //location.reload();
+
+                            });
+
+
+                    }
+                    else {
+                        alert('O nome da Tarefa não pode ficar em branco!')
+                    }
+
+                },
+
+                closeTask(taskId) {
+                    alert("Encerrando tarefa: " + taskId)
+                    axios.put(host + '/closeTask', { id: taskId }).then(response => {
+                        alert("response...")
+                        console.log(response);
+                        if (response.status == 201) {
+                            alert('tarefa concluida');
+                        }
+                    })
+                        .catch(error => {
+                            alert(error);
+                        })
+                        .finally(() => {
+
+                        });
+                }
+
+            }
+        })
+
+    </script>
+    <style>
+        .img {
+            text-align: center;
+
+        }
+    </style>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p class="has-text-centered">
+                <b>TASKR</b> - task manager is a software developed by Mauricio Jr - 2021
+            </p>
+            <img class="img" src="images/made-with-bulma.png" width="200" height="38">
+
+        </div>
+    </footer>
+
+</body>
+
+</html>
